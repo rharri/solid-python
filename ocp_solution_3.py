@@ -1,6 +1,13 @@
 # ocp_solution_3.py
 # !/usr/bin/env python3
-"""The third solution."""
+"""The third solution.
+
+Use the strategy design pattern and a protocol.
+
+"Strategy is a behavioral design pattern that lets you define a family of
+algorithms, put each of them into a separate class, and make their objects
+interchangeable." (https://refactoring.guru/design-patterns/strategy)
+"""
 
 from dataclasses import dataclass
 from inspect import isclass
