@@ -53,7 +53,7 @@ class Phone:
         """The type of this sender."""
         return ContactMethod.EMAIL
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -79,7 +79,7 @@ class SMS:
         """The type of this sender."""
         return ContactMethod.SMS
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -105,7 +105,7 @@ class Email:
         """The type of this sender."""
         return ContactMethod.EMAIL
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -125,11 +125,11 @@ def contact_customer(customer: Customer, message: str) -> None:
         message: The message for the customer.
     """
     if customer.preferred_contact_method == ContactMethod.PHONE:
-        Phone(customer).sendMessage(message)
+        Phone(customer).send_message(message)
     elif customer.preferred_contact_method == ContactMethod.SMS:
-        SMS(customer).sendMessage(message)
+        SMS(customer).send_message(message)
     elif customer.preferred_contact_method == ContactMethod.EMAIL:
-        Email(customer).sendMessage(message)
+        Email(customer).send_message(message)
 
 
 if __name__ == "__main__":
