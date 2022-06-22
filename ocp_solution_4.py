@@ -1,6 +1,13 @@
 # ocp_solution_3.py
 # !/usr/bin/env python3
-"""The fourth solution."""
+"""The fourth solution.
+
+Use the strategy design pattern and an abstract class.
+
+"Strategy is a behavioral design pattern that lets you define a family of
+algorithms, put each of them into a separate class, and make their objects
+interchangeable." (https://refactoring.guru/design-patterns/strategy)
+"""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -104,7 +111,7 @@ def contact_customer(customer: Customer, message: str) -> None:
     """Send a message to the customer based on their preferred contact method.
 
     Args:
-        customer: The customer to contact
+        customer: The customer to contact.
         message: The message for the customer.
     """
     contact_method: Type[Sender] = customer.preferred_contact_method
