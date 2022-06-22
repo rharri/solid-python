@@ -7,6 +7,17 @@ Use the strategy design pattern and an abstract class.
 "Strategy is a behavioral design pattern that lets you define a family of
 algorithms, put each of them into a separate class, and make their objects
 interchangeable." (https://refactoring.guru/design-patterns/strategy)
+
+ABCs in Python:
+- Abstract Base Class (ABC)
+- ABCs are similar to other languages:
+    - They define a contract for their subclasses
+    - They cannot be instantiated
+    - They can contain abstract and concrete methods
+- ABCs are different from other languages:
+    - Subclasses do not have to be part of the inheritance hierarchy
+    - Subclass membership can be defined by the programmer
+- Good for code resuse within a family of types
 """
 
 from abc import ABC, abstractmethod
@@ -18,12 +29,8 @@ class Sender(ABC):
     def __init__(self, customer: "Customer") -> None:
         self.customer = customer
 
-    @classmethod
-    def __subclasshook__(cls, sub):
-        return hasattr(sub, "sendMessage") and callable(sub.sendMessage)
-
     @abstractmethod
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         raise NotImplementedError
 
 
@@ -53,7 +60,7 @@ class Phone(Sender):
         """
         self.customer = customer
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -74,7 +81,7 @@ class SMS(Sender):
         """
         self.customer = customer
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -95,7 +102,7 @@ class Email(Sender):
         """
         self.customer = customer
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -115,7 +122,7 @@ def contact_customer(customer: Customer, message: str) -> None:
         message: The message for the customer.
     """
     contact_method: Type[Sender] = customer.preferred_contact_method
-    contact_method(customer).sendMessage(message)
+    contact_method(customer).send_message(message)
 
 
 if __name__ == "__main__":
