@@ -7,6 +7,11 @@ Use the strategy design pattern and a protocol.
 "Strategy is a behavioral design pattern that lets you define a family of
 algorithms, put each of them into a separate class, and make their objects
 interchangeable." (https://refactoring.guru/design-patterns/strategy)
+
+Protocols in Python:
+- Allow a class to be considered a subclass by static type checkers using
+  structural subtyping (PEP 544)
+- Essentially duck typing with type checking support
 """
 
 from dataclasses import dataclass
@@ -15,8 +20,8 @@ from typing import Protocol, Type, runtime_checkable
 
 
 @runtime_checkable
-class Sender(Protocol):
-    def sendMessage(self, message: str) -> None:
+class SupportsSendMessage(Protocol):
+    def send_message(self, message: str) -> None:
         ...
 
 
@@ -32,7 +37,7 @@ class Customer:
 
     phone_number: str
     email_address: str
-    preferred_contact_method: Type[Sender]  # Reference to the class
+    preferred_contact_method: Type[SupportsSendMessage]  # Class reference
 
 
 class Phone:
@@ -46,7 +51,7 @@ class Phone:
         """
         self.customer = customer
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -67,7 +72,7 @@ class SMS:
         """
         self.customer = customer
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -88,7 +93,7 @@ class Email:
         """
         self.customer = customer
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -108,10 +113,12 @@ def contact_customer(customer: Customer, message: str) -> None:
         customer: The customer to contact.
         message: The message for the customer.
     """
-    contact_method: Type[Sender] = customer.preferred_contact_method
+    contact_method: Type[
+        SupportsSendMessage
+    ] = customer.preferred_contact_method  # noqa
 
     assert isclass(contact_method)
-    contact_method(customer).sendMessage(message)
+    contact_method(customer).send_message(message)
 
 
 if __name__ == "__main__":

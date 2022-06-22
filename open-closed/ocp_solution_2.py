@@ -51,7 +51,7 @@ class Phone:
         """The type of this sender."""
         return ContactMethod.EMAIL
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -77,7 +77,7 @@ class SMS:
         """The type of this sender."""
         return ContactMethod.SMS
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -103,7 +103,7 @@ class Email:
         """The type of this sender."""
         return ContactMethod.EMAIL
 
-    def sendMessage(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         """Sends the message.
 
         Args:
@@ -130,7 +130,7 @@ class Sender:
         """Initializes an instance of Sender."""
         self.contact_method = contact_method
 
-    def getSender(self):
+    def get_sender(self):
         """Returns a sender based on the contact method."""
         return Sender._available_senders[self.contact_method]
 
@@ -145,8 +145,8 @@ def contact_customer(customer: Customer, message: str) -> None:
         message: The message for the customer.
     """
     # duck type polymorphism
-    sender = Sender(customer.preferred_contact_method).getSender()
-    sender(customer).sendMessage(message)
+    sender = Sender(customer.preferred_contact_method).get_sender()
+    sender(customer).send_message(message)
 
 
 if __name__ == "__main__":
