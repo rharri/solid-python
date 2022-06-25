@@ -28,7 +28,7 @@ class Customer:
     preferred_contact_method: Callable[["Customer", str], None]
 
 
-def makeCall(customer: Customer, message: str) -> None:
+def make_call(customer: Customer, message: str) -> None:
     """Send the message via telephone.
 
     Args:
@@ -39,7 +39,7 @@ def makeCall(customer: Customer, message: str) -> None:
     print(f"phone call made to {phone_number} with message: '{message}'")
 
 
-def sendSMS(customer: Customer, message: str) -> None:
+def send_sms(customer: Customer, message: str) -> None:
     """Send the message via SMS.
 
     Args:
@@ -50,7 +50,7 @@ def sendSMS(customer: Customer, message: str) -> None:
     print(f"sms sent to {phone_number} with message: '{message}'")
 
 
-def sendEmail(customer: Customer, message: str) -> None:
+def send_email(customer: Customer, message: str) -> None:
     """Sends the message via email.
 
     Args:
@@ -76,9 +76,9 @@ def contact_customer(customer: Customer, message: str) -> None:
 
 if __name__ == "__main__":
     customers = (
-        Customer("555-7302", "bob@solid.com", sendEmail),
-        Customer("555-7303", "raj@solid.com", sendSMS),
-        Customer("555-7304", "sofia@solid.com", makeCall),
+        Customer("555-7302", "bob@solid.com", send_email),
+        Customer("555-7303", "raj@solid.com", send_sms),
+        Customer("555-7304", "sofia@solid.com", make_call),
     )
 
     for customer in customers:
