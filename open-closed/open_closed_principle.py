@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 """A demonstration of the open closed principle
 
-This demonstration is based on Robert C. Martin's paper entitled,
+This demonstration is based on Robert C. Martin's paper titled,
 "Design Principles And Patterns."
 
 Quotes:
