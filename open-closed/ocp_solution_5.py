@@ -9,11 +9,23 @@ algorithms, put each of them into a separate class, and make their objects
 interchangeable." (https://refactoring.guru/design-patterns/strategy)
 """
 
-from dataclasses import dataclass
 from typing import Callable
 
 
-@dataclass
+def parse_phone_number(value: str) -> str:
+    # FIXME: Parse value and ensure valid phone number
+    pass
+
+
+def parse_email_address(value: str) -> str:
+    # FIXME: parse x and ensure valid email address
+    pass
+
+
+# Type alias
+ContactMethod = Callable[["Customer", str], None]
+
+
 class Customer:
     """Represents a customer.
 
@@ -23,9 +35,15 @@ class Customer:
     - preferred_contact_method
     """
 
-    phone_number: str
-    email_address: str
-    preferred_contact_method: Callable[["Customer", str], None]
+    def __init__(
+        self,
+        phone_number: str,
+        email_address: str,
+        preferred_contact_method: ContactMethod,
+    ) -> None:
+        self.phone_number = parse_phone_number(phone_number)
+        self.email_address = parse_email_address(email_address)
+        self.preferred_contact_method = preferred_contact_method
 
 
 def make_call(customer: Customer, message: str) -> None:
@@ -70,8 +88,7 @@ def contact_customer(customer: Customer, message: str) -> None:
         customer: The customer to contact.
         message: The message for the customer.
     """
-    contact_method = customer.preferred_contact_method
-    contact_method(customer, message)
+    customer.preferred_contact_method(customer, message)
 
 
 if __name__ == "__main__":
