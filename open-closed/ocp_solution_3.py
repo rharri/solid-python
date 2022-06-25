@@ -10,7 +10,7 @@ interchangeable." (https://refactoring.guru/design-patterns/strategy)
 
 Protocols in Python:
 - Allow a class to be considered a subclass by static type checkers using
-  structural subtyping (PEP 544)
+structural subtyping (PEP 544)
 - Essentially duck typing with type checking support
 - More Pythonic than ABC?
 - Good for abstracting a third-party API
