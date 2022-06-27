@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 """The first solution.
 
-Utilize Python's support for first class functions.
+Utilize Python's support for first class callables.
 
 This problem is inspired by Brandon Rhodes examination of the AbstractFactory
 pattern in Python: https://python-patterns.guide/gang-of-four/abstract-factory/
