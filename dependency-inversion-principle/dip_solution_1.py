@@ -14,60 +14,102 @@ from typing import Callable
 
 
 @dataclass
-class LogLine:
-    """Represents a log line."""
+class LogEvent:
+    """Represents a single log event.
+
+    Public attributes:
+    - level: The level of the logged event (e.g. WARNING).
+    - detail: The detail of logged event.
+    - date: The date of when the logged event was recorded.
+    """
 
     level: str
     detail: str
     date: str
 
 
-class DateParser:
-    """A flexible date parser."""
+class DatetimeParser:
+    """A DatetimeParser object represents a configurable datetime parser."""
 
-    def __init__(self, value: str, in_fmt: str, out_fmt: str) -> None:
-        self.value = value
-        self.in_fmt = in_fmt
-        self.out_fmt = out_fmt
+    def __init__(
+        self, date_string: str, *, format: str, str_format: str
+    ) -> None:  # noqa
+        """Initializes a new DatetimeParser instance. All arguments are
+        required.
+
+        Args:
+            date_string: A string representation of a date to parse.
+            format: The format of the date_string.
+            str_format: The format of the string representation for the parsed
+            date_string.
+        """
+        if not date_string or not date_string.strip():
+            raise ValueError("date_string should contain a date")
+        if not format or not format.strip():
+            raise ValueError("format should contain valid format codes")
+        if not str_format or not str_format.strip():
+            raise ValueError("str_format should contain valid format codes")
+
+        self._date_string = date_string
+        self.format = format
+        self._str_format = str_format
 
     def parse(self) -> datetime:
-        return datetime.strptime(self.value, self.in_fmt)
+        """Return a datetime object."""
+        return datetime.strptime(self._date_string, self.format)
 
     def __str__(self) -> str:
-        return self.parse().strftime(self.out_fmt)
+        return self.parse().strftime(self._str_format)
 
 
-def build_long_date_parser(value: str) -> DateParser:
-    """Construct a DateParser that formats the value as a long date string."""
-    return DateParser(value, "%Y-%m-%d", "%c")
+def build_long_date_parser(date_string: str) -> DatetimeParser:
+    """Return a DatetimeParser that formats the date_string as a long date string.
+
+    Args:
+        date_string: A string representation of a date to parse.
+    """
+    return DatetimeParser(date_string, format="%Y-%m-%d", str_format="%c")
 
 
-def build_short_date_parser(value: str) -> DateParser:
-    """Construct a DateParser that formats the value as a short date string."""
-    return DateParser(value, "%Y-%m-%d", "%x")
+def build_short_date_parser(date_string: str) -> DatetimeParser:
+    """Return a DatetimeParser that formats the date_string as a short date string.
+
+    Args:
+        date_string: A string representation of a date to parse.
+    """
+    return DatetimeParser(date_string, format="%Y-%m-%d", str_format="%x")
 
 
-# print_log is no longer dependent on a particular concrete implementation
-def print_log(
-    line: LogLine, parse_date: Callable[[str], DateParser] = None
+# print_log_event is no longer dependent on a particular concrete
+# implementation
+def print_log_event(
+    log_event: LogEvent, parse_date: Callable[[str], DatetimeParser] = None
 ) -> None:  # noqa
-    """Print the log line to standard IO."""
+    """Print the log event to standard out.
+
+    Args:
+        log_event: The LogEvent to print.
+        parse_date: If specified, will be called with every LogEvent date. By
+        default, a parser with a long date format is used.
+    """
     parse_date = parse_date or build_long_date_parser
-    print(f"{parse_date(line.date)}: [{line.level}] {line.detail}")
+    print(
+        f"{parse_date(log_event.date)}: [{log_event.level}] {log_event.detail}"
+    )  # noqa
 
 
 log_lines = [
-    LogLine("INFO", "Loading module spam.", "2022-06-26"),
-    LogLine("INFO", "Loading module more_spam.", "2022-06-26"),
-    LogLine("WARNING", "Not enough spam.", "2022-06-26"),
-    LogLine("ERROR", "TypeError in module spam.", "2022-06-26"),
+    LogEvent("INFO", "Loading module spam.", "2022-06-26"),
+    LogEvent("INFO", "Loading module more_spam.", "2022-06-26"),
+    LogEvent("WARNING", "Not enough spam.", "2022-06-26"),
+    LogEvent("ERROR", "TypeError in module spam.", "2022-06-26"),
 ]
 
 # The caller can control how dates are parsed and displayed
 # and doesn't need to know the details of how to construct a
-# DateParser object.
+# DatetimeParser object.
 for log_line in log_lines:
-    print_log(log_line, parse_date=build_long_date_parser)
+    print_log_event(log_line, parse_date=build_long_date_parser)
 
 for log_line in log_lines:
-    print_log(log_line, parse_date=build_short_date_parser)
+    print_log_event(log_line, parse_date=build_short_date_parser)
