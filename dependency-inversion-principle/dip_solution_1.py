@@ -51,12 +51,12 @@ class DatetimeParser:
             raise ValueError("str_format should contain valid format codes")
 
         self._date_string = date_string
-        self.format = format
+        self._format = format
         self._str_format = str_format
 
     def parse(self) -> datetime:
         """Return a datetime object."""
-        return datetime.strptime(self._date_string, self.format)
+        return datetime.strptime(self._date_string, self._format)
 
     def __str__(self) -> str:
         return self.parse().strftime(self._str_format)
