@@ -28,62 +28,63 @@ class LogEvent:
     date: str
 
 
-class DatetimeParser:
-    """A DatetimeParser object represents a configurable datetime parser."""
+class DateTimeParser:
+    """A DateTimeParser object represents a configurable datetime parser."""
 
-    def __init__(
-        self, date_string: str, *, format: str, str_format: str
-    ) -> None:  # noqa
-        """Initializes a new DatetimeParser instance. All arguments are
+    def __init__(self, *, format: str, str_format: str) -> None:  # noqa
+        """Initializes a new DateTimeParser instance. All arguments are
         required.
 
         Args:
-            date_string: A string representation of a date to parse.
             format: The format of the date_string.
             str_format: The format of the string representation for the parsed
             date_string.
         """
-        if not date_string or not date_string.strip():
-            raise ValueError("date_string should contain a date")
         if not format or not format.strip():
             raise ValueError("format should contain valid format codes")
         if not str_format or not str_format.strip():
             raise ValueError("str_format should contain valid format codes")
 
-        self._date_string = date_string
         self._format = format
         self._str_format = str_format
 
-    def parse(self) -> datetime:
-        """Return a datetime object."""
-        return datetime.strptime(self._date_string, self._format)
+    def to_datetime(self, date_string: str) -> datetime:
+        """Return a datetime object.
 
-    def __str__(self) -> str:
-        return self.parse().strftime(self._str_format)
+        Args:
+            date_string: A string representation of a date to parse.
+        """
+        if not date_string or not date_string.strip():
+            raise ValueError("date_string should contain a date")
+        return datetime.strptime(date_string, self._format)
+
+    def to_string(self, date_string: str) -> str:
+        """Return a string representation based on str_format.
+
+        Args:
+            date_string: A string representation of a date to parse.
+        """
+        if not date_string or not date_string.strip():
+            raise ValueError("date_string should contain a date")
+        return self.to_datetime(date_string).strftime(self._str_format)
 
 
-def build_long_date_parser(date_string: str) -> DatetimeParser:
-    """Return a DatetimeParser that formats the date_string as a long date string.
-
-    Args:
-        date_string: A string representation of a date to parse.
-    """
-    return DatetimeParser(date_string, format="%Y-%m-%d", str_format="%c")
+def build_long_date_parser() -> DateTimeParser:
+    """Return a DateTimeParser that formats the date_string as a long date
+    string."""
+    return DateTimeParser(format="%Y-%m-%d", str_format="%c")
 
 
-def build_short_date_parser(date_string: str) -> DatetimeParser:
-    """Return a DatetimeParser that formats the date_string as a short date string.
-
-    Args:
-        date_string: A string representation of a date to parse.
-    """
-    return DatetimeParser(date_string, format="%Y-%m-%d", str_format="%x")
+def build_short_date_parser() -> DateTimeParser:
+    """Return a DateTimeParser that formats the date_string as a short date
+    string."""
+    return DateTimeParser(format="%Y-%m-%d", str_format="%x")
 
 
 # print_log_event is no longer dependent on a particular concrete
 # implementation
 def print_log_event(
-    log_event: LogEvent, parse_date: Callable[[str], DatetimeParser] = None
+    log_event: LogEvent, parse_date: Callable[[], DateTimeParser] = None
 ) -> None:  # noqa
     """Print the log event to standard out.
 
@@ -94,7 +95,10 @@ def print_log_event(
     """
     parse_date = parse_date or build_long_date_parser
     print(
-        f"{parse_date(log_event.date)}: [{log_event.level}] {log_event.detail}"
+        (
+            f"{parse_date().to_string(log_event.date)}: [{log_event.level}] "
+            f"{log_event.detail}"
+        )
     )  # noqa
 
 
@@ -107,7 +111,7 @@ log_lines = [
 
 # The caller can control how dates are parsed and displayed
 # and doesn't need to know the details of how to construct a
-# DatetimeParser object.
+# DateTimeParser object.
 for log_line in log_lines:
     print_log_event(log_line, parse_date=build_long_date_parser)
 
