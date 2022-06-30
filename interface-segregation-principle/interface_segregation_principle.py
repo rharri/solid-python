@@ -83,8 +83,8 @@ class EBookReader(ABC):
 
 # Reality: ComicBookReader's do not support playing sound or video.
 # This class is forced to implement the entire contract provided by
-# EBookReader. Futhermore, API changes to play_sound or play_video
-# will result in uneccessary changes to this class.
+# EBookReader. Furthermore, API changes to play_sound or play_video
+# will result in unnecessary changes to this class.
 class ComicBookReader(EBookReader):
     """An e-reader device that is capable of reading comic books."""
 
