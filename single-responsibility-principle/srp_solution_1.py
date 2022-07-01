@@ -8,13 +8,17 @@ The functions use simple APIs and can be composed to achieve a larger goal.
 
 
 import os
-from typing import Final
+from typing import Any, Final, Generator, Tuple
 
 MAX_COLS: Final[int] = 3
+LazyEntries = Generator[Tuple[str, str], Any, Any]
 
 
 def listdir(path: str, seperator=" ") -> str:
-    """Returns a value separated string of entries from the path."""
+    """Returns a value separated string of entries from the path.
+
+    Example: listdir("/path/") -> "file1 file2 dir1 file3"
+    """
     return seperator.join(os.listdir(path))
 
 
@@ -23,8 +27,9 @@ def sort_entries(entries: str, seperator=" ") -> str:
     return seperator.join(sorted(entries.split(seperator)))
 
 
-def print_entries_in_columns(entries: str, seperator=" ") -> None:
-    """Prints entries in a column format."""
+# No side-effects
+def entries_in_column_format(entries: str, seperator=" ") -> LazyEntries:
+    """Yields entries in a column format."""
     width = os.get_terminal_size().columns // MAX_COLS
 
     column = 1
@@ -32,17 +37,18 @@ def print_entries_in_columns(entries: str, seperator=" ") -> None:
         end_char = ""
         if column == MAX_COLS:
             end_char, column = "\n", 0
-        print(f"{entry:<{width}}", end=end_char)
+        yield f"{entry:<{width}}", end_char
         column += 1
+
+
+# Isolate side-effects (IO)
+def print_entries(entries: str, seperator=" ") -> None:
+    """Print entries to standard out."""
+    for entry, end_char in entries_in_column_format(entries, seperator):
+        print(entry, end=end_char)
     print(end="\n")
-
-
-def count_entries(entries: str, seperator=" ") -> int:
-    """Returns a count of the value seperated entries."""
-    return len(entries.split(seperator))
 
 
 if __name__ == "__main__":
     entries = listdir("../")
-    print_entries_in_columns(sort_entries(entries))
-    print(count_entries(entries))
+    print_entries(sort_entries(entries))
