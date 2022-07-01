@@ -61,9 +61,6 @@ class ListDir:
             column += 1
         print(end="\n")
 
-    def to_file(self) -> None:
-        pass
-
     def __len__(self) -> int:
         """Returns the number of entries in the current path."""
         return len(os.listdir(self._path))
