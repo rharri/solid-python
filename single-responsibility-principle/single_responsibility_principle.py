@@ -61,12 +61,7 @@ class ListDir:
             column += 1
         print(end="\n")
 
-    def __len__(self) -> int:
-        """Returns the number of entries in the current path."""
-        return len(os.listdir(self._path))
-
 
 if __name__ == "__main__":
     ls = ListDir("../")
     ls.print()
-    print(len(ls))
