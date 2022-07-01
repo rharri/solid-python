@@ -19,7 +19,7 @@ def listdir(path: str, seperator=" ") -> str:
 
 
 def sort_entries(entries: str, seperator=" ") -> str:
-    """Returns a sorted value seperated string of entries."""
+    """Returns a value seperated string of sorted entries."""
     return seperator.join(sorted(entries.split(seperator)))
 
 
@@ -38,7 +38,7 @@ def print_entries_in_columns(entries: str, seperator=" ") -> None:
 
 
 def count_entries(entries: str, seperator=" ") -> int:
-    """Retruns a count of the value seperated entries."""
+    """Returns a count of the value seperated entries."""
     return len(entries.split(seperator))
 
 
